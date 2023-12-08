@@ -9,11 +9,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import fetchNews from './services/newsService';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Pagination } from '@mui/material';
+import LanguageSelector from './components/LanguageSelector';
 
 const App: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
   const [selectedTopic] = useState('apple');
   const [darkMode, setDarkMode] = useState(false);
+  const [language, setLanguage] = useState('en');
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 9;
 
@@ -24,15 +26,15 @@ const App: React.FC = () => {
   const paginate = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
-  
+
   useEffect(() => {
     const loadNews = async () => {
-      const data = await fetchNews(selectedTopic, 'en');
+      const data = await fetchNews(selectedTopic, language);
       setArticles(data.articles);
     };
 
     loadNews();
-  }, [selectedTopic, 'en']);
+  }, [selectedTopic, language]);
 
   return (
     <ThemeProvider theme={theme(darkMode)}>
@@ -48,6 +50,7 @@ const App: React.FC = () => {
       <div style={{ minHeight: 'calc(100vh - 20.4vh)' }}>
         <Container style={{ marginTop: '20px' }}>
           <ThemeSelector darkMode={darkMode} setDarkMode={setDarkMode} />
+          <LanguageSelector language={language} setLanguage={setLanguage} data-testid="language-selector" />
           <>
             {currentArticles.map(article => (
                 <NewsCard
