@@ -10,12 +10,14 @@ import fetchNews from './services/newsService';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Pagination } from '@mui/material';
 import LanguageSelector from './components/LanguageSelector';
+import LoadingSpinner from './components/LoadingSpinner';
 
 const App: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
   const [selectedTopic] = useState('apple');
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState('en');
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 9;
 
@@ -29,8 +31,10 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadNews = async () => {
+      setLoading(true);
       const data = await fetchNews(selectedTopic, language);
       setArticles(data.articles);
+      setLoading(false);
     };
 
     loadNews();
@@ -51,24 +55,27 @@ const App: React.FC = () => {
         <Container style={{ marginTop: '20px' }}>
           <ThemeSelector darkMode={darkMode} setDarkMode={setDarkMode} />
           <LanguageSelector language={language} setLanguage={setLanguage} data-testid="language-selector" />
-          <>
-            {currentArticles.map(article => (
-                <NewsCard
-                  key={article.title}
-                  title={article.title}
-                  description={article.description}
-                  urlToImage={article.urlToImage}
-                  url={article.url}
-                />
-            ))}
-            <Pagination
+          
+          {loading ? <LoadingSpinner /> : (
+            <>
+              {currentArticles.map(article => (
+                  <NewsCard
+                    key={article.title}
+                    title={article.title}
+                    description={article.description}
+                    urlToImage={article.urlToImage}
+                    url={article.url}
+                  />
+              ))}
+              <Pagination
                 count={Math.ceil(articles.length / articlesPerPage)}
                 page={currentPage}
                 onChange={paginate}
                 color="primary"
                 style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
               />
-          </>
+            </>
+          )}
         </Container>
       </div>
     </ThemeProvider>
