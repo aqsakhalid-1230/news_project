@@ -1,0 +1,7 @@
+django
+requests
+python-decouple
+django-cors-headers
+pytest
+pytest-django
+responses
