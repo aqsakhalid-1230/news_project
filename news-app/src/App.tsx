@@ -12,6 +12,7 @@ import { Pagination } from '@mui/material';
 import LanguageSelector from './components/LanguageSelector';
 import LoadingSpinner from './components/LoadingSpinner';
 import TopicsSelector from './components/TopicsSelector';
+import Alert from '@mui/material/Alert';
 
 const App: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
@@ -19,6 +20,7 @@ const App: React.FC = () => {
   const [language, setLanguage] = useState('en');
   const [loading, setLoading] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState('apple');
+  const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 9;
 
@@ -34,7 +36,11 @@ const App: React.FC = () => {
     const loadNews = async () => {
       setLoading(true);
       const data = await fetchNews(selectedTopic, language);
-      setArticles(data.articles);
+      if (data.error) {
+        setError(true);
+      } else {
+        setArticles(data.articles);
+      }
       setLoading(false);
     };
 
@@ -58,6 +64,7 @@ const App: React.FC = () => {
           <LanguageSelector language={language} setLanguage={setLanguage} data-testid="language-selector" />
           <TopicsSelector selectedTopic={selectedTopic} setSelectedTopic={setSelectedTopic} />
           
+          {error && <Alert severity="error">Error fetching news articles.</Alert>}
           {loading ? <LoadingSpinner /> : (
             <>
               {currentArticles.map(article => (
