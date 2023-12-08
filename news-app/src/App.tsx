@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Container } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import NewsCard from './components/NewsCard';
 import { ThemeProvider } from '@mui/material/styles';
 import ThemeSelector from './components/ThemeSelector';
@@ -67,15 +67,19 @@ const App: React.FC = () => {
           {error && <Alert severity="error">Error fetching news articles.</Alert>}
           {loading ? <LoadingSpinner /> : (
             <>
-              {currentArticles.map(article => (
-                  <NewsCard
-                    key={article.title}
-                    title={article.title}
-                    description={article.description}
-                    urlToImage={article.urlToImage}
-                    url={article.url}
-                  />
-              ))}
+              <Grid container spacing={3}>
+                {currentArticles.map(article => (
+                  <Grid item xs={12} sm={6} md={4} key={article.title}>
+                    <NewsCard
+                      key={article.title}
+                      title={article.title}
+                      description={article.description}
+                      urlToImage={article.urlToImage}
+                      url={article.url}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
               <Pagination
                 count={Math.ceil(articles.length / articlesPerPage)}
                 page={currentPage}
