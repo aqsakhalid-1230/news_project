@@ -11,13 +11,14 @@ import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Pagination } from '@mui/material';
 import LanguageSelector from './components/LanguageSelector';
 import LoadingSpinner from './components/LoadingSpinner';
+import TopicsSelector from './components/TopicsSelector';
 
 const App: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
-  const [selectedTopic] = useState('apple');
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState('en');
   const [loading, setLoading] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState('apple');
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 9;
 
@@ -55,6 +56,7 @@ const App: React.FC = () => {
         <Container style={{ marginTop: '20px' }}>
           <ThemeSelector darkMode={darkMode} setDarkMode={setDarkMode} />
           <LanguageSelector language={language} setLanguage={setLanguage} data-testid="language-selector" />
+          <TopicsSelector selectedTopic={selectedTopic} setSelectedTopic={setSelectedTopic} />
           
           {loading ? <LoadingSpinner /> : (
             <>
