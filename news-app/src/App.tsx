@@ -1,13 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, AppBar, Toolbar, Typography, Box } from '@mui/material';
 import NewsCard from './components/NewsCard';
 import { ThemeProvider } from '@mui/material/styles';
 import ThemeSelector from './components/ThemeSelector';
 import theme from './components/Theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import fetchNews from './services/newsService';
-import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Pagination } from '@mui/material';
 import LanguageSelector from './components/LanguageSelector';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -50,6 +49,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme(darkMode)}>
       <CssBaseline />
+
       <AppBar position="static" color="primary" elevation={1}>
         <Toolbar>
           <Typography variant="h6" color="inherit">
@@ -63,7 +63,7 @@ const App: React.FC = () => {
           <ThemeSelector darkMode={darkMode} setDarkMode={setDarkMode} />
           <LanguageSelector language={language} setLanguage={setLanguage} data-testid="language-selector" />
           <TopicsSelector selectedTopic={selectedTopic} setSelectedTopic={setSelectedTopic} />
-          
+
           {error && <Alert severity="error">Error fetching news articles.</Alert>}
           {loading ? <LoadingSpinner /> : (
             <>
@@ -91,6 +91,9 @@ const App: React.FC = () => {
           )}
         </Container>
       </div>
+      <Box mt={5} py={3} bgcolor="primary.main" color="white" textAlign="center">
+        <Typography variant="body2">© 2023 News App</Typography>
+      </Box>
     </ThemeProvider>
   );
 }
