@@ -8,12 +8,23 @@ import theme from './components/Theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import fetchNews from './services/newsService';
 import { AppBar, Toolbar, Typography } from '@mui/material';
+import { Pagination } from '@mui/material';
 
 const App: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
   const [selectedTopic] = useState('apple');
   const [darkMode, setDarkMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 9;
 
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
+
+  const paginate = (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
+  
   useEffect(() => {
     const loadNews = async () => {
       const data = await fetchNews(selectedTopic, 'en');
@@ -38,7 +49,7 @@ const App: React.FC = () => {
         <Container style={{ marginTop: '20px' }}>
           <ThemeSelector darkMode={darkMode} setDarkMode={setDarkMode} />
           <>
-            {articles.map(article => (
+            {currentArticles.map(article => (
                 <NewsCard
                   key={article.title}
                   title={article.title}
@@ -47,6 +58,13 @@ const App: React.FC = () => {
                   url={article.url}
                 />
             ))}
+            <Pagination
+                count={Math.ceil(articles.length / articlesPerPage)}
+                page={currentPage}
+                onChange={paginate}
+                color="primary"
+                style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+              />
           </>
         </Container>
       </div>
